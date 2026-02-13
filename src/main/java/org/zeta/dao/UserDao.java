@@ -11,71 +11,67 @@ import java.util.List;
 
 public class UserDao {
 
-    private static final String FILE_PATH = "users.json";
+    private static final String FILE_NAME = "users.json";
     private static final ObjectMapper mapper = new ObjectMapper();
+    private static List<User> users = new ArrayList<>();
 
-    // Get all users from file
-    private static List<User> getAllUsers() throws IOException {
-        File file = new File(FILE_PATH);
 
-        if (!file.exists()) {
-            file.createNewFile();
-            mapper.writeValue(file, new ArrayList<User>());
-        }
-
-        if (file.length() == 0) {
-            return new ArrayList<>();
-        }
-
-        return mapper.readValue(file, new TypeReference<List<User>>() {});
+    static {
+        loadFromFile();
     }
 
-    // Save all users back to file
-    private static void saveAllUsers(List<User> users) throws IOException {
-        mapper.writeValue(new File(FILE_PATH), users);
+    private static void saveToFile() {
+        try {
+            mapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(new File(FILE_NAME), users);
+        } catch (IOException e) {
+            System.out.println("Error saving data: " + e.getMessage());
+        }
     }
 
-    // Add user
-    public static void addUser(User user) throws IOException {
+    private static void loadFromFile() {
+        try {
+            File file = new File(FILE_NAME);
+            if (file.exists() && file.length() > 0) {
+                users = mapper.readValue(file, new TypeReference<List<User>>() {});
+            } else {
+                users = new ArrayList<>();
+                mapper.writeValue(file, users);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading data: " + e.getMessage());
+            users = new ArrayList<>();
+        }
+    }
 
-        List<User> users = getAllUsers();
 
-        // check duplicate
+    public static void addUser(User user) {
         for (User u : users) {
             if (u.getUsername().equalsIgnoreCase(user.getUsername())) {
                 throw new RuntimeException("User already exists");
             }
         }
-
         users.add(user);
-        saveAllUsers(users);
+        saveToFile();
     }
 
-    // Get user by username
-    public static User getUser(String username) throws IOException {
 
-        List<User> users = getAllUsers();
-
+    public static User getUser(String username) {
         for (User u : users) {
             if (u.getUsername().equalsIgnoreCase(username)) {
                 return u;
             }
         }
-
         return null;
     }
 
     // Check if user exists
-    public static boolean userExists(String username) throws IOException {
+    public static boolean userExists(String username) {
+        return getUser(username) != null;
+    }
 
-        List<User> users = getAllUsers();
-
-        for (User u : users) {
-            if (u.getUsername().equalsIgnoreCase(username)) {
-                return true;
-            }
-        }
-
-        return false;
+    // Get all users
+    public static List<User> getAllUsers() {
+        return new ArrayList<>(users);
     }
 }

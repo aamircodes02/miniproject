@@ -19,12 +19,7 @@ public class Main {
 
         UserDao userDAO = new UserDao();
         AuthenticationService authService = new AuthenticationService(userDAO);
-
         ObjectMapper mapper = new ObjectMapper();
-
-        User user = mapper.readValue(new File("users.json"), User.class);
-
-        System.out.println(user.getUsername());
 
 
         while (true) {

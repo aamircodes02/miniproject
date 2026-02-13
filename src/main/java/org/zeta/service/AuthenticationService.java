@@ -4,6 +4,7 @@ import org.zeta.model.Role;
 import org.zeta.model.User;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AuthenticationService {
 
@@ -25,28 +26,25 @@ public class AuthenticationService {
             return false;
         }
 
-        User user = new User(username, password, role, Role.BUILDER);
+        User user = new User(username, password, role);
         UserDao.addUser(user);
 
         System.out.println("Registration successful!");
         return true;
     }
 
-    public User login(String username, String password) throws IOException {
+    public User login(String username, String password) {
 
-        User user = UserDao.getUser(username);
+        List<User> users = UserDao.getAllUsers();
 
-        if (user == null) {
-            System.out.println("User not found!");
-            return null;
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)
+                    && user.getPassword().equals(password)) {
+                return user;
+            }
         }
 
-        if (!user.getPassword().equals(password)) {
-            System.out.println("Invalid password!");
-            return null;
-        }
-
-        System.out.println("Login successful!");
-        return user;
+        return null;
     }
+
 }
