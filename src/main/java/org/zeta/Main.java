@@ -1,16 +1,14 @@
 package org.zeta;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.zeta.model.Builder;
-import org.zeta.model.ProjectManager;
-import org.zeta.model.User;
 import org.zeta.dao.UserDao;
+import org.zeta.model.Role;
+import org.zeta.model.User;
 import org.zeta.service.AuthenticationService;
 import org.zeta.views.BuilderView;
 import org.zeta.views.ClientView;
 import org.zeta.views.ProjectManagerView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
@@ -21,7 +19,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        UserDao userDAO = new UserDao();
+        UserDao userDAO = new UserDao("users");
         AuthenticationService authService = new AuthenticationService(userDAO);
         ObjectMapper mapper = new ObjectMapper();
         User loggedInUser = null;
@@ -50,7 +48,7 @@ public class Main {
                     System.out.println("Enter role (BUILDER / PROJECT MANAGER/ CLIENT):");
                     String role = sc.nextLine();
 
-                    authService.register(regUsername, regPassword, confirmPassword, role);
+                    authService.register(regUsername, regPassword, confirmPassword, Role.valueOf(role));
                     break;
 
                 case 2:
@@ -64,15 +62,15 @@ public class Main {
 
                     if (loggedInUser != null) {
                         System.out.println("Welcome " + loggedInUser.getUsername());
-                        if(Objects.equals(loggedInUser.getRole(), "CLIENT")){
-                            ClientView.clientDashboard();
+                        if(Objects.equals(loggedInUser.getRole(), Role.CLIENT)){
+                            ClientView.clientDashboard(loggedInUser);
 
                         }
-                        if(Objects.equals(loggedInUser.getRole(), "BUILDER")){
+                        if(Objects.equals(loggedInUser.getRole(),Role.BUILDER)){
                             BuilderView.builderDashboard();
 
                         }
-                        if(Objects.equals(loggedInUser.getRole(), "PROJECTMANAGER")){
+                        if(Objects.equals(loggedInUser.getRole(), Role.PROJECT_MANAGER)){
                             ProjectManagerView.ProjectManagerDashboard();
 
                         }

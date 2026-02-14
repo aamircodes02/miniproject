@@ -1,11 +1,11 @@
 package org.zeta.model;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Project {
 
     private String projectId;
     private String projectName;
-    private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     private ProjectStatus status;
@@ -13,10 +13,20 @@ public class Project {
     private String projectManagerId;
     private String builderId;
 
+    public Project() {
+    }
+
+    public Project(String projectName,
+                   String clientId) {
+        this.projectId = UUID.randomUUID().toString();
+        this.projectName = projectName;
+        this.clientId = clientId;
+        this.status=ProjectStatus.Submitted;
+    }
+
 
     public Project(String projectId,
                    String projectName,
-                   String description,
                    LocalDate startDate,
                    LocalDate endDate,
                    ProjectStatus status,
@@ -26,7 +36,6 @@ public class Project {
 
         this.projectId = projectId;
         this.projectName = projectName;
-        this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
@@ -34,8 +43,6 @@ public class Project {
         this.projectManagerId = projectManagerId;
         this.builderId = builderId;
     }
-
-    // Getters & Setters
 
     public String getProjectId() {
         return projectId;
@@ -53,13 +60,6 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public LocalDate getStartDate() {
         return startDate;

@@ -1,5 +1,6 @@
 package org.zeta.service;
 import org.zeta.dao.UserDao;
+import org.zeta.model.Role;
 import org.zeta.model.User;
 import java.io.IOException;
 import java.util.List;
@@ -7,28 +8,28 @@ import java.util.logging.Logger;
 
 public class AuthenticationService {
 
-    private UserDao userDAO;
+    private UserDao UserDao;
     private static final Logger logger =
             Logger.getLogger(AuthenticationService.class.getName());
 
-    public AuthenticationService(UserDao userDAO) {
-        this.userDAO = userDAO;
+    public AuthenticationService(UserDao UserDao) {
+        this.UserDao = UserDao;
     }
 
-    public boolean register(String username, String password, String confirmPassword, String role) throws IOException {
+    public boolean register(String username, String password, String confirmPassword, Role role) throws IOException {
 
         if (!password.equals(confirmPassword)) {
             logger.warning("Passwords do not match!");
             return false;
         }
 
-        if (UserDao.userExists(username)) {
+        if (UserDao.findByUsername(username)==null) {
             logger.warning("User already exists!");
             return false;
         }
 
         User user = new User(username, password, role);
-        UserDao.addUser(user);
+        UserDao.save(user);
 
         logger.info("Registration successful!");
         return true;
@@ -36,7 +37,7 @@ public class AuthenticationService {
 
     public User login(String username, String password) {
 
-        List<User> users = UserDao.getAllUsers();
+        List<User> users = UserDao.getAll();
 
         for (User user : users) {
             if (user.getUsername().equalsIgnoreCase(username)
