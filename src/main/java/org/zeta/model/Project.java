@@ -10,7 +10,6 @@ public class Project {
     private ProjectStatus status;
     private String clientId;
     private String projectManagerId;
-    private String builderId;
 
     public Project() {
     }
@@ -29,8 +28,7 @@ public class Project {
                    LocalDate startDate,
                    ProjectStatus status,
                    String clientId,
-                   String projectManagerId,
-                   String builderId) {
+                   String projectManagerId) {
 
         this.projectId = projectId;
         this.projectName = projectName;
@@ -38,7 +36,6 @@ public class Project {
         this.status = status;
         this.clientId = clientId;
         this.projectManagerId = projectManagerId;
-        this.builderId = builderId;
     }
 
     public String getProjectId() {
@@ -90,11 +87,5 @@ public class Project {
         this.projectManagerId = projectManagerId;
     }
 
-    public String getBuilderId() {
-        return builderId;
-    }
 
-    public void setBuilderId(String builderId) {
-        this.builderId = builderId;
-    }
 }

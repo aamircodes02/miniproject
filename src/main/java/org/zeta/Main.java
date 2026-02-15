@@ -65,11 +65,11 @@ public class Main {
 
                         }
                         if(Objects.equals(loggedInUser.getRole(),Role.BUILDER)){
-                            BuilderView.builderDashboard();
+                            BuilderView.builderDashboard(loggedInUser);
 
                         }
                         if(Objects.equals(loggedInUser.getRole(), Role.PROJECT_MANAGER)){
-                            ProjectManagerView.ProjectManagerDashboard();
+                            ProjectManagerView.ProjectManagerDashboard(loggedInUser);
 
                         }
                     }

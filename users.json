@@ -23,4 +23,14 @@
   "username" : "jkl",
   "password" : "asdf",
   "role" : "PROJECT_MANAGER"
+}, {
+  "id" : "847df785-01e1-4bb2-8d28-b061e1e64256",
+  "username" : "sam",
+  "password" : "asdf",
+  "role" : "BUILDER"
+}, {
+  "id" : "731175b6-74bd-4fe0-b58d-1e963e4a26aa",
+  "username" : "rahul",
+  "password" : "asdf",
+  "role" : "BUILDER"
 } ]

@@ -48,7 +48,7 @@ public abstract class BaseDao<T> {
         return new ArrayList<>(dataList);
     }
 
-    protected void add(T obj) {
+    public void add(T obj) {
         dataList.add(obj);
         saveToFile();
     }
