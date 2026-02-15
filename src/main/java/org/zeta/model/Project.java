@@ -7,7 +7,6 @@ public class Project {
     private String projectId;
     private String projectName;
     private LocalDate startDate;
-    private LocalDate endDate;
     private ProjectStatus status;
     private String clientId;
     private String projectManagerId;
@@ -28,7 +27,6 @@ public class Project {
     public Project(String projectId,
                    String projectName,
                    LocalDate startDate,
-                   LocalDate endDate,
                    ProjectStatus status,
                    String clientId,
                    String projectManagerId,
@@ -37,7 +35,6 @@ public class Project {
         this.projectId = projectId;
         this.projectName = projectName;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.status = status;
         this.clientId = clientId;
         this.projectManagerId = projectManagerId;
@@ -67,14 +64,6 @@ public class Project {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
     }
 
     public ProjectStatus getStatus() {

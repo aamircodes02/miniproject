@@ -2,6 +2,7 @@ package org.zeta.dao;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.zeta.model.Project;
 
 import java.io.File;
 import java.io.IOException;
