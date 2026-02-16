@@ -2,9 +2,11 @@ package org.zeta.views;
 
 import org.zeta.dao.ProjectDao;
 import org.zeta.dao.UserDao;
+import org.zeta.model.Project;
 import org.zeta.model.User;
 import org.zeta.service.implementation.ClientService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ClientView {
@@ -32,7 +34,19 @@ public class ClientView {
 
 
                 case 2:
-                    clientService.getClientProjects(client.getId());
+                    List<Project> projects =
+                            clientService.getClientProjects(client.getId());
+
+                    if (projects.isEmpty()) {
+                        System.out.println("No projects found.");
+                    } else {
+                        System.out.println("<-------Here are your Projects " +  );
+                        for (Project p : projects) {
+                            System.out.println(
+                                    p.getProjectId() + " - " + p.getProjectName()
+                            );
+                        }
+                    }
 
 
                     break;
