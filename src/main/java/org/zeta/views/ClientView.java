@@ -24,7 +24,15 @@ public class ClientView {
         UserDao userDao = new UserDao();
         IClientService clientService = new ClientService(projectDao, userDao);
 
+        boolean running = true;
+
         while (running) {
+            System.out.println("""
+                    1. Submit a project
+                    2. View your project updates
+                    3. Logout
+                    Enter your choice:
+                    """);
 
             System.out.println("""
                     1. Submit a project
@@ -36,7 +44,13 @@ public class ClientView {
             try {
                 String input = sc.nextLine();
                 int clientChoice = CommonValidator.validateInteger(input, "Menu choice");
+
                 switch (clientChoice) {
+                    case 1 -> {
+                        System.out.println("Submitting a project...");
+                        // You can implement project submission here
+                        System.out.println("Feature coming soon!");
+                    }
 
                 switch (clientChoice) {
 
@@ -55,9 +69,7 @@ public class ClientView {
                         } else {
                             System.out.println("<------- Here are your Projects -------->");
                             for (Project p : projects) {
-                                System.out.println(
-                                        p.getProjectId() + " - " + p.getProjectName()
-                                );
+                                System.out.println(p.getProjectId() + " - " + p.getProjectName());
                             }
                         }
                         break;
@@ -75,6 +87,7 @@ public class ClientView {
                 System.out.println("Error: " + e.getMessage());
             }
         }
-    }
 
+        sc.close();
+    }
 }
