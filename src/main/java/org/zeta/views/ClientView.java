@@ -36,6 +36,7 @@ public class ClientView {
             try {
                 String input = sc.nextLine();
                 int clientChoice = CommonValidator.validateInteger(input, "Menu choice");
+                switch (clientChoice) {
 
                 switch (clientChoice) {
 
@@ -75,4 +76,5 @@ public class ClientView {
             }
         }
     }
+
 }
