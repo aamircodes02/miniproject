@@ -13,23 +13,30 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ClientView {
+
     public static void clientDashboard(User client) {
+
         Scanner sc = new Scanner(System.in);
         System.out.println("HEY Client!");
         boolean running = true;
+
         ProjectDao projectDao = new ProjectDao();
         UserDao userDao = new UserDao();
-
         IClientService clientService = new ClientService(projectDao, userDao);
 
         while (running) {
 
-            System.out.println("Enter 1 if you want to submit a project\nEnter 2 if you want to view your project's update\n3 Logout");
+            System.out.println("""
+                    1. Submit a project
+                    2. View your project updates
+                    3. Logout
+                    Enter your choice:
+                    """);
+
             try {
                 String input = sc.nextLine();
 
                 int clientChoice = CommonValidator.validateInteger(input, "Menu choice");
-                switch (clientChoice) {
 
                     case 1:
                         List<Project> projects =

@@ -39,33 +39,53 @@ public class Main {
                 switch (choice) {
 
                     case 1:
-                        try {
-                            System.out.println("Enter username:");
-                            String regUsername = sc.nextLine();
+                        System.out.println("Enter username:");
+                        String regUsername = sc.nextLine();
 
-                            System.out.println("Enter password:");
-                            String regPassword = sc.nextLine();
+                        System.out.println("Enter password:");
+                        String regPassword = sc.nextLine();
 
-                            System.out.println("Confirm password:");
-                            String confirmPassword = sc.nextLine();
+                        System.out.println("Confirm password:");
+                        String confirmPassword = sc.nextLine();
 
-                            System.out.println("Enter role (BUILDER / PROJECT_MANAGER / CLIENT):");
-                            String role = sc.nextLine().toUpperCase();
+                        Role selectedRole = null;
 
-                            authService.register(
-                                    regUsername,
-                                    regPassword,
-                                    confirmPassword,
-                                    Role.valueOf(role)
-                            );
+                        while (selectedRole == null) {
 
-                            System.out.println("Registration successful!");
+                            System.out.println("""
+            Select Role:
+            1. Builder
+            2. Project Manager
+            3. Client
+            Enter your choice:
+            """);
 
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid role entered.");
-                        } catch (ValidationException e) {
-                            logger.severe("Error: " + e.getMessage());
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid input. Please enter a number.");
+                                sc.nextLine(); // clear invalid input
+                                continue;
+                            }
+
+                            int roleChoice = sc.nextInt();
+                            sc.nextLine(); // consume newline
+
+                            switch (roleChoice) {
+                                case 1:
+                                    selectedRole = Role.BUILDER;
+                                    break;
+                                case 2:
+                                    selectedRole = Role.PROJECT_MANAGER;
+                                    break;
+                                case 3:
+                                    selectedRole = Role.CLIENT;
+                                    break;
+                                default:
+                                    System.out.println("Please select a valid option (1-3).");
+                            }
                         }
+
+
+                        authService.register(regUsername, regPassword, confirmPassword, selectedRole);
                         break;
 
                     case 2:
@@ -75,27 +95,25 @@ public class Main {
 
                             System.out.println("Enter password:");
                             String loginPassword = sc.nextLine();
-
                             User loggedInUser = authService.login(loginUsername, loginPassword);
 
                             if (loggedInUser != null) {
                                 System.out.println("Welcome " + loggedInUser.getUsername());
+                                if (Objects.equals(loggedInUser.getRole(), Role.CLIENT)) {
+                                    ClientView.clientDashboard(loggedInUser);
 
-                                switch (loggedInUser.getRole()) {
-                                    case CLIENT:
-                                        ClientView.clientDashboard(loggedInUser);
-                                        break;
-                                    case BUILDER:
-                                        BuilderView.builderDashboard(loggedInUser);
-                                        break;
-                                    case PROJECT_MANAGER:
-                                        ProjectManagerView.ProjectManagerDashboard(loggedInUser);
-                                        break;
+                                }
+                                if (Objects.equals(loggedInUser.getRole(), Role.BUILDER)) {
+                                    BuilderView.builderDashboard(loggedInUser);
+
+                                }
+                                if (Objects.equals(loggedInUser.getRole(), Role.PROJECT_MANAGER)) {
+                                    ProjectManagerView.ProjectManagerDashboard(loggedInUser);
+
                                 }
                             }
-
-                        } catch (ValidationException e) {
-                            logger.severe("Error: " + e.getMessage());
+                        } catch (ValidationException validationException) {
+                            logger.severe("Error: " + validationException.getMessage());
                         }
                         break;
 
