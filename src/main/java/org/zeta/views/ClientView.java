@@ -24,7 +24,6 @@ public class ClientView {
         UserDao userDao = new UserDao();
         IClientService clientService = new ClientService(projectDao, userDao);
 
-        boolean running = true;
 
         while (running) {
             System.out.println("""
@@ -45,49 +44,44 @@ public class ClientView {
                 String input = sc.nextLine();
                 int clientChoice = CommonValidator.validateInteger(input, "Menu choice");
 
-                switch (clientChoice) {
-                    case 1 -> {
-                        System.out.println("Submitting a project...");
-                        // You can implement project submission here
-                        System.out.println("Feature coming soon!");
+
+
+                    switch (clientChoice) {
+
+                        case 1:
+                            System.out.println("Enter Project Name:");
+                            String projectName = sc.nextLine();
+                            clientService.submitProject(projectName, client.getId());
+                            break;
+
+                        case 2:
+                            List<Project> projects =
+                                    clientService.getClientProjects(client.getId());
+
+                            if (projects.isEmpty()) {
+                                System.out.println("No projects found.");
+                            } else {
+                                System.out.println("<------- Here are your Projects -------->");
+                                for (Project p : projects) {
+                                    System.out.println(p.getProjectId() + " - " + p.getProjectName());
+                                }
+                            }
+                            break;
+
+                        case 3:
+                            System.out.println("Logging out...");
+                            running = false;
+                            break;
+
+                        default:
+                            System.out.println("Please select a valid option (1-3).");
                     }
 
-                switch (clientChoice) {
-
-                    case 1:
-                        System.out.println("Enter Project Name:");
-                        String projectName = sc.nextLine();
-                        clientService.submitProject(projectName, client.getId());
-                        break;
-
-                    case 2:
-                        List<Project> projects =
-                                clientService.getClientProjects(client.getId());
-
-                        if (projects.isEmpty()) {
-                            System.out.println("No projects found.");
-                        } else {
-                            System.out.println("<------- Here are your Projects -------->");
-                            for (Project p : projects) {
-                                System.out.println(p.getProjectId() + " - " + p.getProjectName());
-                            }
-                        }
-                        break;
-
-                    case 3:
-                        System.out.println("Logging out...");
-                        running = false;
-                        break;
-
-                    default:
-                        System.out.println("Please select a valid option (1-3).");
+                } catch(ValidationException e){
+                    System.out.println("Error: " + e.getMessage());
                 }
-
-            } catch (ValidationException e) {
-                System.out.println("Error: " + e.getMessage());
             }
-        }
 
-        sc.close();
-    }
+            sc.close();
+        }
 }

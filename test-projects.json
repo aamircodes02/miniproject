@@ -1,0 +1,46 @@
+[ {
+  "projectId" : "cd98adf5-fc0d-412b-8181-5dc6803feb3c",
+  "projectName" : "TDD Project",
+  "startDate" : null,
+  "duration" : 0,
+  "status" : "Upcoming",
+  "description" : null,
+  "clientId" : "1dd3fd09-e9df-497e-ac92-f0e0227240ba",
+  "projectManagerId" : "079de2f3-a3e2-4d84-9b7c-8194d79fe19c"
+}, {
+  "projectId" : "159b288e-7d40-4602-9049-03f1ea9333c8",
+  "projectName" : "Project A",
+  "startDate" : null,
+  "duration" : 0,
+  "status" : "Upcoming",
+  "description" : null,
+  "clientId" : "99bfb717-5375-4322-b2ca-76fe1f056501",
+  "projectManagerId" : "59c4ebcd-167c-400a-afaf-e2affa41f52a"
+}, {
+  "projectId" : "6c29ee05-733f-44a4-b0e5-1ab18274acc8",
+  "projectName" : "Project B",
+  "startDate" : null,
+  "duration" : 0,
+  "status" : "Upcoming",
+  "description" : null,
+  "clientId" : "99bfb717-5375-4322-b2ca-76fe1f056501",
+  "projectManagerId" : "dfe1685f-91f2-4f05-bc51-1cdd68297559"
+}, {
+  "projectId" : "e6a0109a-cfbf-4bd9-91e6-950290c147e7",
+  "projectName" : "Project C",
+  "startDate" : null,
+  "duration" : 0,
+  "status" : "Upcoming",
+  "description" : null,
+  "clientId" : "16b26454-71e6-4341-a2b2-692df552ad64",
+  "projectManagerId" : "99c6c154-cedb-4dfc-bf57-9c1317e4620b"
+}, {
+  "projectId" : "1c23c459-8fcd-4e09-a4ff-6cfd71a43460",
+  "projectName" : "TDD Project",
+  "startDate" : null,
+  "duration" : 0,
+  "status" : "Upcoming",
+  "description" : null,
+  "clientId" : "bc4fa723-1b1c-49ef-b11a-468800e6d537",
+  "projectManagerId" : "85ca833a-cb97-4fda-9808-3591e0a77f91"
+} ]

@@ -1,6 +1,5 @@
 package org.zeta;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.zeta.dao.UserDao;
 import org.zeta.model.Role;
 import org.zeta.model.User;
@@ -11,34 +10,41 @@ import org.zeta.views.BuilderView;
 import org.zeta.views.ClientView;
 import org.zeta.views.ProjectManagerView;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
         Logger logger = Logger.getLogger("main");
+
         UserDao userDAO = new UserDao();
         AuthenticationService authService = new AuthenticationService(userDAO);
-        ObjectMapper mapper = new ObjectMapper();
 
         while (true) {
 
-            System.out.println("Please choose:");
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Exit application");
+            System.out.println("""
+                    
+                    ===== Builder Portfolio Management System =====
+                    1. Register
+                    2. Login
+                    3. Exit application
+                    Enter your choice:
+                    """);
+
             try {
+
                 String input = sc.nextLine();
                 int choice = CommonValidator.validateInteger(input, "Menu choice");
 
                 switch (choice) {
 
+                    // ================= REGISTER =================
                     case 1:
+
                         System.out.println("Enter username:");
                         String regUsername = sc.nextLine();
 
@@ -52,26 +58,17 @@ public class Main {
 
                         while (selectedRole == null) {
 
-                        Role selectedRole = null;
-
-                        while (selectedRole == null) {
-
                             System.out.println("""
-            Select Role:
-            1. Builder
-            2. Project Manager
-            3. Client
-            Enter your choice:
-            """);
+                                    Select Role:
+                                    1. Builder
+                                    2. Project Manager
+                                    3. Client
+                                    Enter your choice:
+                                    """);
 
-                            if (!sc.hasNextInt()) {
-                                System.out.println("Invalid input. Please enter a number.");
-                                sc.nextLine(); // clear invalid input
-                                continue;
-                            }
-
-                            int roleChoice = sc.nextInt();
-                            sc.nextLine(); // consume newline
+                            String roleInput = sc.nextLine();
+                            int roleChoice =
+                                    CommonValidator.validateInteger(roleInput, "Role choice");
 
                             switch (roleChoice) {
                                 case 1:
@@ -88,49 +85,63 @@ public class Main {
                             }
                         }
 
+                        authService.register(regUsername,
+                                regPassword,
+                                confirmPassword,
+                                selectedRole);
 
-                        authService.register(regUsername, regPassword, confirmPassword, selectedRole);
                         break;
 
+                    // ================= LOGIN =================
                     case 2:
+
                         try {
                             System.out.println("Enter username:");
                             String loginUsername = sc.nextLine();
 
                             System.out.println("Enter password:");
                             String loginPassword = sc.nextLine();
-                            User loggedInUser = authService.login(loginUsername, loginPassword);
+
+                            User loggedInUser =
+                                    authService.login(loginUsername, loginPassword);
 
                             if (loggedInUser != null) {
-                                System.out.println("Welcome " + loggedInUser.getUsername());
+
+                                System.out.println("Welcome "
+                                        + loggedInUser.getUsername());
+
                                 if (Objects.equals(loggedInUser.getRole(), Role.CLIENT)) {
                                     ClientView.clientDashboard(loggedInUser);
-
                                 }
-                                if (Objects.equals(loggedInUser.getRole(), Role.BUILDER)) {
+
+                                else if (Objects.equals(loggedInUser.getRole(), Role.BUILDER)) {
                                     BuilderView.builderDashboard(loggedInUser);
-
                                 }
-                                if (Objects.equals(loggedInUser.getRole(), Role.PROJECT_MANAGER)) {
-                                    ProjectManagerView.ProjectManagerDashboard(loggedInUser);
 
+                                else if (Objects.equals(loggedInUser.getRole(),
+                                        Role.PROJECT_MANAGER)) {
+                                    ProjectManagerView
+                                            .ProjectManagerDashboard(loggedInUser);
                                 }
                             }
-                        } catch (ValidationException validationException) {
-                            logger.severe("Error: " + validationException.getMessage());
+
+                        } catch (ValidationException e) {
+                            logger.severe("Error: " + e.getMessage());
                         }
+
                         break;
 
+                    // ================= EXIT =================
                     case 3:
                         System.out.println("Exiting application...");
-                        System.exit(0);
-                        break;
+                        return;
 
                     default:
-                        System.out.println("Invalid choice");
-                }}
-catch (ValidationException ValidationException) {
-                System.out.println("Error: " + ValidationException.getMessage());
+                        System.out.println("Invalid choice. Please try again.");
+                }
+
+            } catch (ValidationException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
