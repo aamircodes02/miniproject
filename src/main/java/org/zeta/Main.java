@@ -59,13 +59,44 @@ public class Main {
                                     Role.valueOf(role)
                             );
 
-                            System.out.println("Registration successful!");
+                        Role selectedRole = null;
 
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid role entered.");
-                        } catch (ValidationException e) {
-                            logger.severe("Error: " + e.getMessage());
+                        while (selectedRole == null) {
+
+                            System.out.println("""
+            Select Role:
+            1. Builder
+            2. Project Manager
+            3. Client
+            Enter your choice:
+            """);
+
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid input. Please enter a number.");
+                                sc.nextLine(); // clear invalid input
+                                continue;
+                            }
+
+                            int roleChoice = sc.nextInt();
+                            sc.nextLine(); // consume newline
+
+                            switch (roleChoice) {
+                                case 1:
+                                    selectedRole = Role.BUILDER;
+                                    break;
+                                case 2:
+                                    selectedRole = Role.PROJECT_MANAGER;
+                                    break;
+                                case 3:
+                                    selectedRole = Role.CLIENT;
+                                    break;
+                                default:
+                                    System.out.println("Please select a valid option (1-3).");
+                            }
                         }
+
+
+                        authService.register(regUsername, regPassword, confirmPassword, selectedRole);
                         break;
 
                     case 2:
