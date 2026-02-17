@@ -56,14 +56,11 @@ public class ProjectManagerService {
         }
 
         Project project = projectOpt.get();
-
-        // 🔒 Ensure manager owns the project
         if (!project.getProjectManagerId().equals(manager.getId())) {
             System.out.println("You are not authorized to create tasks for this project.");
             return;
         }
 
-        // 🔥 NEW BUSINESS RULE
         if (project.getStatus() != ProjectStatus.InProgress) {
             System.out.println("This project is not available to add task.");
             return;
@@ -81,7 +78,7 @@ public class ProjectManagerService {
 
 
 
-    public static void assignTask(String projectId,TaskDao taskDao, UserDao userDao) {
+    public static void assignTask(String projectId,String taskId,String builderId,TaskDao taskDao, UserDao userDao) {
 
         List<Task> tasks = taskDao.findByProjectId(projectId);
         if (tasks.isEmpty()) {
@@ -95,10 +92,6 @@ public class ProjectManagerService {
                 System.out.println(t.getId() + " - " + t.getTaskName());
             }
         }
-
-        System.out.println("Enter Task ID to assign:");
-        String taskId = sc.nextLine().trim();
-
         List<User> builders = userDao.findByRole(Role.BUILDER);
         if (builders.isEmpty()) {
             System.out.println("No builders available.");
@@ -109,10 +102,6 @@ public class ProjectManagerService {
         for (User b : builders) {
             System.out.println(b.getId() + " - " + b.getUsername());
         }
-
-        System.out.println("Enter Builder ID to assign:");
-        String builderId = sc.nextLine().trim();
-
         if(builders.stream().anyMatch(b->b.getId().equals(builderId))) {
             taskDao.assignBuilder(taskId, builderId);
             System.out.println("Builder assigned to task successfully.");
@@ -148,7 +137,7 @@ public class ProjectManagerService {
         }
 
     }
-    public static void addProjectDetails(String projectId,String description,ProjectDao projectDao, User manager) {
+    public static void addProjectDetails(String projectId,String description,int durationInput,ProjectDao projectDao, User manager) {
         Optional<Project> projectOpt = projectDao.findById(projectId);
         if (projectOpt.isEmpty()) {
             System.out.println("Project not found.");
@@ -159,12 +148,7 @@ public class ProjectManagerService {
             System.out.println("You are not authorized to modify this project.");
             return;
         }
-
-        System.out.println("Enter the duration for this project:");
-        int durationInput = sc.nextInt();
-
         try {
-
             project.setDescription(description);
             project.setDuration(durationInput);
             project.setStatus(ProjectStatus.InProgress);
