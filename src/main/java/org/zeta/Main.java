@@ -52,6 +52,10 @@ public class Main {
 
                         while (selectedRole == null) {
 
+                        Role selectedRole = null;
+
+                        while (selectedRole == null) {
+
                             System.out.println("""
             Select Role:
             1. Builder
