@@ -38,4 +38,9 @@
   "username" : "aamir",
   "password" : "1234",
   "role" : "BUILDER"
+}, {
+  "id" : "49f5a944-afc8-4b5c-abd2-a9cdb81ad2c5",
+  "username" : "john",
+  "password" : "asdf1234@",
+  "role" : "PROJECT_MANAGER"
 } ]

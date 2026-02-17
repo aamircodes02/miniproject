@@ -48,10 +48,44 @@ public class Main {
                         System.out.println("Confirm password:");
                         String confirmPassword = sc.nextLine();
 
-                        System.out.println("Enter role (BUILDER / PROJECT MANAGER/ CLIENT):");
-                        String role = sc.nextLine();
+                        Role selectedRole = null;
 
-                        authService.register(regUsername, regPassword, confirmPassword, Role.valueOf(role));
+                        while (selectedRole == null) {
+
+                            System.out.println("""
+            Select Role:
+            1. Builder
+            2. Project Manager
+            3. Client
+            Enter your choice:
+            """);
+
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid input. Please enter a number.");
+                                sc.nextLine(); // clear invalid input
+                                continue;
+                            }
+
+                            int roleChoice = sc.nextInt();
+                            sc.nextLine(); // consume newline
+
+                            switch (roleChoice) {
+                                case 1:
+                                    selectedRole = Role.BUILDER;
+                                    break;
+                                case 2:
+                                    selectedRole = Role.PROJECT_MANAGER;
+                                    break;
+                                case 3:
+                                    selectedRole = Role.CLIENT;
+                                    break;
+                                default:
+                                    System.out.println("Please select a valid option (1-3).");
+                            }
+                        }
+
+
+                        authService.register(regUsername, regPassword, confirmPassword, selectedRole);
                         break;
 
                     case 2:
