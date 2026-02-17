@@ -17,7 +17,7 @@ public abstract class BaseDao<T> {
 
     public BaseDao(String fileName, TypeReference<List<T>> typeRef) {
         this.file = new File(fileName);
-        mapper.findAndRegisterModules(); // for LocalDate support
+        mapper.findAndRegisterModules();
         loadFromFile(typeRef);
     }
 
