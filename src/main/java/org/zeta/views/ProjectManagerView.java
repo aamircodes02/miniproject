@@ -62,7 +62,6 @@ public class ProjectManagerView {
 
                         System.out.println("Enter Project Description:");
                         String description = sc.nextLine().trim();
-
                         System.out.println("Enter the duration for this project:");
                         String durationStr = sc.nextLine();
                         int duration = CommonValidator.validateInteger(durationStr, "Duration");

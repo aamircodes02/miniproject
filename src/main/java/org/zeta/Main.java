@@ -46,6 +46,7 @@ public class Main {
                         String regPassword;
                         String confirmPassword;
 
+<<<<<<< HEAD
                         if (console != null) {
                             regPassword = new String(console.readPassword("Enter password: "));
                             confirmPassword = new String(console.readPassword("Confirm password: "));
@@ -58,6 +59,10 @@ public class Main {
                             confirmPassword = sc.nextLine();
                         }
 
+=======
+                        System.out.println("Confirm password:");
+                        String confirmPassword = sc.nextLine();
+>>>>>>> 68e3ba8a767a6995a7fde6130a30d9a81712f387
                         Role selectedRole = null;
                         while (selectedRole == null) {
                             System.out.println("""
@@ -68,9 +73,19 @@ public class Main {
                                     Enter your choice:
                                     """);
 
+<<<<<<< HEAD
                             String roleInput = sc.nextLine();
                             int roleChoice =
                                     CommonValidator.validateInteger(roleInput, "Role choice");
+=======
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid input. Please enter a number.");
+                                sc.nextLine();
+                                continue;
+                            }
+                            int roleChoice = sc.nextInt();
+                            sc.nextLine();
+>>>>>>> 68e3ba8a767a6995a7fde6130a30d9a81712f387
 
                             switch (roleChoice) {
                                 case 1 -> selectedRole = Role.BUILDER;
