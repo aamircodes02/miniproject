@@ -26,14 +26,10 @@ public class Main {
 
         while (true) {
 
-            System.out.println("""
-                    
-                    ===== Builder Portfolio Management System =====
-                    1. Register
-                    2. Login
-                    3. Exit application
-                    Enter your choice:
-                    """);
+            System.out.println("\nPlease choose:");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Exit application");
 
             try {
 
@@ -42,9 +38,7 @@ public class Main {
 
                 switch (choice) {
 
-                    // ================= REGISTER =================
-                    case 1:
-
+                    case 1 -> { // Registration
                         System.out.println("Enter username:");
                         String regUsername = sc.nextLine();
 
@@ -54,10 +48,9 @@ public class Main {
                         System.out.println("Confirm password:");
                         String confirmPassword = sc.nextLine();
 
+                        // Role selection loop
                         Role selectedRole = null;
-
                         while (selectedRole == null) {
-
                             System.out.println("""
                                     Select Role:
                                     1. Builder
@@ -66,82 +59,67 @@ public class Main {
                                     Enter your choice:
                                     """);
 
+                            if (!sc.hasNextInt()) {
+                                System.out.println("Invalid input. Please enter a number.");
+                                sc.nextLine(); // clear invalid input
+                                continue;
+                            }
+
                             String roleInput = sc.nextLine();
                             int roleChoice =
                                     CommonValidator.validateInteger(roleInput, "Role choice");
 
                             switch (roleChoice) {
-                                case 1:
-                                    selectedRole = Role.BUILDER;
-                                    break;
-                                case 2:
-                                    selectedRole = Role.PROJECT_MANAGER;
-                                    break;
-                                case 3:
-                                    selectedRole = Role.CLIENT;
-                                    break;
-                                default:
-                                    System.out.println("Please select a valid option (1-3).");
+                                case 1 -> selectedRole = Role.BUILDER;
+                                case 2 -> selectedRole = Role.PROJECT_MANAGER;
+                                case 3 -> selectedRole = Role.CLIENT;
+                                default -> System.out.println("Please select a valid option (1-3).");
                             }
                         }
 
-                        authService.register(regUsername,
-                                regPassword,
-                                confirmPassword,
-                                selectedRole);
+                        boolean registered = authService.register(regUsername, regPassword, confirmPassword, selectedRole);
+                        if (registered) {
+                            System.out.println("Registration successful!");
+                        } else {
+                            System.out.println("Registration failed. User may already exist or data is invalid.");
+                        }
+                    }
 
-                        break;
+                    case 2 -> { // Login
+                        System.out.println("Enter username:");
+                        String loginUsername = sc.nextLine();
 
-                    // ================= LOGIN =================
-                    case 2:
+                        System.out.println("Enter password:");
+                        String loginPassword = sc.nextLine();
 
                         try {
-                            System.out.println("Enter username:");
-                            String loginUsername = sc.nextLine();
+                            User loggedInUser = authService.login(loginUsername, loginPassword);
+                            System.out.println("Welcome " + loggedInUser.getUsername());
 
-                            System.out.println("Enter password:");
-                            String loginPassword = sc.nextLine();
-
-                            User loggedInUser =
-                                    authService.login(loginUsername, loginPassword);
-
-                            if (loggedInUser != null) {
-
-                                System.out.println("Welcome "
-                                        + loggedInUser.getUsername());
-
-                                if (Objects.equals(loggedInUser.getRole(), Role.CLIENT)) {
-                                    ClientView.clientDashboard(loggedInUser);
-                                }
-
-                                else if (Objects.equals(loggedInUser.getRole(), Role.BUILDER)) {
-                                    BuilderView.builderDashboard(loggedInUser);
-                                }
-
-                                else if (Objects.equals(loggedInUser.getRole(),
-                                        Role.PROJECT_MANAGER)) {
-                                    ProjectManagerView
-                                            .ProjectManagerDashboard(loggedInUser);
-                                }
+                            // Role-based dashboards
+                            Role role = loggedInUser.getRole();
+                            if (role == Role.CLIENT) {
+                                ClientView.clientDashboard(loggedInUser);
+                            } else if (role == Role.BUILDER) {
+                                BuilderView.builderDashboard(loggedInUser);
+                            } else if (role == Role.PROJECT_MANAGER) {
+                                ProjectManagerView.ProjectManagerDashboard(loggedInUser);
                             }
-
                         } catch (ValidationException e) {
-                            logger.severe("Error: " + e.getMessage());
+                            logger.severe("Login failed: " + e.getMessage());
                         }
+                    }
 
-                        break;
-
-                    // ================= EXIT =================
-                    case 3:
+                    case 3 -> { // Exit
                         System.out.println("Exiting application...");
-                        return;
+                        System.exit(0);
+                    }
 
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
+                    default -> System.out.println("Invalid choice. Please enter 1, 2, or 3.");
                 }
 
-            } catch (ValidationException e) {
-                System.out.println("Error: " + e.getMessage());
+            } catch (ValidationException ve) {
+                System.out.println("Error: " + ve.getMessage());
             }
         }
     }

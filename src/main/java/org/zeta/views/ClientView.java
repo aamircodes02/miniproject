@@ -24,7 +24,6 @@ public class ClientView {
         UserDao userDao = new UserDao();
         IClientService clientService = new ClientService(projectDao, userDao);
 
-
         while (running) {
             System.out.println("""
                     1. Submit a project
