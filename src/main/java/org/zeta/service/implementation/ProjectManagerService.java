@@ -52,7 +52,12 @@ static void checkValidManager(Project project, User manager) {
             return;
         }
         Project project = projectOpt.get();
-        checkValidManager(project,manager);
+
+        if (!project.getProjectManagerId().equals(manager.getId())) {
+            System.out.println("You are not authorized to create tasks for this project.");
+            return;
+        }
+
         if (project.getStatus() != ProjectStatus.InProgress) {
             System.out.println("This project is not available to add task.");
             return;
