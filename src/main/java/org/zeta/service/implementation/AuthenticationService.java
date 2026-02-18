@@ -23,7 +23,6 @@ public class AuthenticationService implements IAuthenticationService {
                             String password,
                             String confirmPassword,
                             Role role) {
-
         try {
             UserValidator.validateRegistration(username, password, confirmPassword, role);
             if (userDao.findByUsername(username).isPresent()) {
@@ -44,7 +43,6 @@ public class AuthenticationService implements IAuthenticationService {
     public User login(String username, String password) {
         UserValidator.validateLogin(username, password);
         Optional<User> userOpt = userDao.findByUsername(username);
-
         if (userOpt.isPresent()
                 && userOpt.get().getPassword().equals(password)) {
             return userOpt.get();
