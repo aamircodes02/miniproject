@@ -10,4 +10,10 @@
   "taskName" : "wash the floor",
   "builderId" : "731175b6-74bd-4fe0-b58d-1e963e4a26aa",
   "status" : "NOT_STARTED"
+}, {
+  "id" : null,
+  "projectId" : "P1",
+  "taskName" : "Task1",
+  "builderId" : "B1",
+  "status" : "COMPLETED"
 } ]

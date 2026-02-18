@@ -22,7 +22,7 @@ public class TaskDao extends BaseDao<Task> {
         remove(task);
     }
 
-    public Optional<Task> findById(String id) {
+    public  Optional<Task> findById(String id) {
         return dataList.stream()
                 .filter(t -> t.getId().equals(id))
                 .findFirst();
