@@ -1,6 +1,5 @@
 package org.zeta;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.zeta.dao.UserDao;
 import org.zeta.model.Role;
 import org.zeta.model.User;
@@ -11,20 +10,19 @@ import org.zeta.views.BuilderView;
 import org.zeta.views.ClientView;
 import org.zeta.views.ProjectManagerView;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
         Logger logger = Logger.getLogger("main");
+
         UserDao userDAO = new UserDao();
         AuthenticationService authService = new AuthenticationService(userDAO);
-        ObjectMapper mapper = new ObjectMapper();
 
         while (true) {
 
@@ -34,6 +32,7 @@ public class Main {
             System.out.println("3. Exit application");
 
             try {
+
                 String input = sc.nextLine();
                 int choice = CommonValidator.validateInteger(input, "Menu choice");
 
