@@ -58,4 +58,10 @@
   "taskName" : "Plumbing",
   "builderId" : null,
   "status" : "NOT_STARTED"
+}, {
+  "id" : null,
+  "projectId" : "P1",
+  "taskName" : "Task1",
+  "builderId" : "B1",
+  "status" : "COMPLETED"
 } ]

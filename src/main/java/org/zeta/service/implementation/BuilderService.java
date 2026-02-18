@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 public class BuilderService {
     static Scanner sc = new Scanner(System.in);
-    static TaskDao taskDao = new TaskDao();
-    static ProjectDao projectDao = new ProjectDao();
-    static List<Task> tasks = taskDao.getAll();
+    public static TaskDao taskDao = new TaskDao();
+    public static ProjectDao projectDao = new ProjectDao();
+    public static List<Task> tasks = taskDao.getAll();
 
     public static void listOfTasks(User Builder) {
         List<Project> projects = projectDao.getAll();
@@ -37,7 +37,7 @@ public class BuilderService {
         tasks.stream()
                 .filter(t -> Objects.equals(t.getBuilderId(), Builder.getId()))
                 .forEach(t -> {
-                    if (t.getTaskName().equals(taskName)) {
+                    if (t.getTaskName().trim().equalsIgnoreCase(taskName.trim())) {
                         t.setStatus(TaskStatus.COMPLETED);
                     }
                     taskDao.saveTask(t);

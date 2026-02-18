@@ -26,14 +26,12 @@ public class AuthServiceTest {
 
     @InjectMocks
     private AuthenticationService authenticationService;
-
     private User user;
 
     @BeforeEach
     void setUp() {
         user = new User("john", "1234", Role.CLIENT);
     }
-
     @Test
     void register_shouldReturnTrue_whenValidData() {
         when(userDao.findByUsername("john")).thenReturn(Optional.empty());

@@ -25,23 +25,17 @@ public class AuthenticationService implements IAuthenticationService {
                             String password,
                             String confirmPassword,
                             Role role) {
-
         try {
 
             UserValidator.validateRegistration(username, password, confirmPassword, role);
-
             if (userDao.findByUsername(username).isPresent()) {
                 throw new ValidationException("User already exists.");
             }
-
             User user = new User(username, password, role);
             userDao.save(user);
-
             logger.info("Registration successful!");
             return true;
-
         } catch (ValidationException e) {
-
             logger.warning(e.getMessage());
             return false;
         }
@@ -50,16 +44,12 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public User login(String username, String password) {
-
         UserValidator.validateLogin(username, password);
-
         Optional<User> userOpt = userDao.findByUsername(username);
-
         if (userOpt.isPresent()
                 && userOpt.get().getPassword().equals(password)) {
             return userOpt.get();
         }
-
         throw new ValidationException("Invalid username or password.");
     }
 
