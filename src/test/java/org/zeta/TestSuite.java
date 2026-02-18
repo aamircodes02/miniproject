@@ -7,7 +7,8 @@ import org.zeta.service.implementation.ProjectManagerService;
 @SelectClasses({
         org.zeta.AuthServiceTest.class,
         org.zeta.ClientServiceTest.class,
-        org.zeta.ProjectManagerTest.class
+        org.zeta.ProjectManagerTest.class,
+        org.zeta.BuilderServiceTest.class
 })
 public class TestSuite {
 }
