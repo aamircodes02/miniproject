@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 
 public class ProjectManagerView {
 
-    static Scanner sc = new Scanner(System.in);
     private static final Logger logger =
             Logger.getLogger(ProjectManagerView.class.getName());
 
     static ProjectManagerService managerService =
             new ProjectManagerService();
 
-    public static void ProjectManagerDashboard(User projectManager) {
+    // Scanner comes from Main
+    public static void ProjectManagerDashboard(User projectManager, Scanner sc) {
 
         ProjectDao projectDao = new ProjectDao();
         UserDao userDao = new UserDao();
@@ -52,56 +52,66 @@ public class ProjectManagerView {
 
                 switch (choice) {
 
-                    case 1:
+                    case 1 -> {
                         managerService.listProjects(projectDao, projectManager);
-                        break;
+                    }
 
-                    case 2:
-
+                    case 2 -> {
                         System.out.println("Enter Project ID to update:");
                         String projectId = sc.nextLine().trim();
+
                         System.out.println("Enter Project Description:");
                         String description = sc.nextLine().trim();
 
                         System.out.println("Enter the duration for this project:");
-                        int durationInput = sc.nextInt();
-                        managerService.addProjectDetails(projectId,description,durationInput,projectDao, projectManager);
-                        break;
+                        String durationStr = sc.nextLine();
+                        int duration = CommonValidator.validateInteger(durationStr, "Duration");
 
-                    case 3:System.out.println("Enter Project ID to create task in:");
+                        managerService.addProjectDetails(
+                                projectId, description, duration, projectDao, projectManager
+                        );
+                    }
+
+                    case 3 -> {
+                        System.out.println("Enter Project ID to create task in:");
                         String projectIdForTask = sc.nextLine().trim();
+
                         System.out.println("Enter Task Name:");
                         String taskName = sc.nextLine().trim();
-                        managerService.createTask(projectIdForTask,taskName,taskDao, projectDao, projectManager);
-                        break;
 
-                    case 4:
+                        managerService.createTask(
+                                projectIdForTask, taskName, taskDao, projectDao, projectManager
+                        );
+                    }
+
+                    case 4 -> {
                         System.out.println("Enter Project ID to assign tasks:");
-                        String projectid = sc.nextLine().trim();
+                        String projectId = sc.nextLine().trim();
+
                         System.out.println("Enter Task ID to assign:");
                         String taskId = sc.nextLine().trim();
+
                         System.out.println("Enter Builder ID to assign:");
                         String builderId = sc.nextLine().trim();
-                        managerService.assignTask(projectid,taskId,builderId,taskDao, userDao);
-                        break;
 
-                    case 5:
-                        managerService.listClients(userDao);
-                        break;
+                        managerService.assignTask(projectId, taskId, builderId, taskDao, userDao);
+                    }
 
-                    case 6:
+                    case 5 -> managerService.listClients(userDao);
+
+                    case 6 -> {
                         System.out.println("Enter Client Username:");
                         String username = sc.nextLine().trim();
-                        managerService.viewProjectsByClient(username,userDao, projectDao);
-                        break;
 
-                    case 7:
+                        managerService.viewProjectsByClient(username, userDao, projectDao);
+                    }
+
+                    case 7 -> {
                         System.out.println("Logging out...");
-                        running = false;
-                        break;
+                        running = false; // back to Main menu
+                    }
 
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
+                    default -> System.out.println("Invalid choice. Please try again.");
                 }
 
             } catch (ValidationException e) {

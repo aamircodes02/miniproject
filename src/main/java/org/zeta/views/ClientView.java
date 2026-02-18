@@ -14,9 +14,9 @@ import java.util.Scanner;
 
 public class ClientView {
 
-    public static void clientDashboard(User client) {
+    // Accept Scanner from Main
+    public static void clientDashboard(User client, Scanner sc) {
 
-        Scanner sc = new Scanner(System.in);
         System.out.println("HEY Client!");
         boolean running = true;
 
@@ -25,12 +25,6 @@ public class ClientView {
         IClientService clientService = new ClientService(projectDao, userDao);
 
         while (running) {
-            System.out.println("""
-                    1. Submit a project
-                    2. View your project updates
-                    3. Logout
-                    Enter your choice:
-                    """);
 
             System.out.println("""
                     1. Submit a project
@@ -43,44 +37,39 @@ public class ClientView {
                 String input = sc.nextLine();
                 int clientChoice = CommonValidator.validateInteger(input, "Menu choice");
 
+                switch (clientChoice) {
 
-
-                    switch (clientChoice) {
-
-                        case 1:
-                            System.out.println("Enter Project Name:");
-                            String projectName = sc.nextLine();
-                            clientService.submitProject(projectName, client.getId());
-                            break;
-
-                        case 2:
-                            List<Project> projects =
-                                    clientService.getClientProjects(client.getId());
-
-                            if (projects.isEmpty()) {
-                                System.out.println("No projects found.");
-                            } else {
-                                System.out.println("<------- Here are your Projects -------->");
-                                for (Project p : projects) {
-                                    System.out.println(p.getProjectId() + " - " + p.getProjectName());
-                                }
-                            }
-                            break;
-
-                        case 3:
-                            System.out.println("Logging out...");
-                            running = false;
-                            break;
-
-                        default:
-                            System.out.println("Please select a valid option (1-3).");
+                    case 1 -> {
+                        System.out.println("Enter Project Name:");
+                        String projectName = sc.nextLine();
+                        clientService.submitProject(projectName, client.getId());
                     }
 
-                } catch(ValidationException e){
-                    System.out.println("Error: " + e.getMessage());
-                }
-            }
+                    case 2 -> {
+                        List<Project> projects =
+                                clientService.getClientProjects(client.getId());
 
-            sc.close();
+                        if (projects.isEmpty()) {
+                            System.out.println("No projects found.");
+                        } else {
+                            System.out.println("<------- Here are your Projects -------->");
+                            for (Project p : projects) {
+                                System.out.println(p.getProjectId() + " - " + p.getProjectName());
+                            }
+                        }
+                    }
+
+                    case 3 -> {
+                        System.out.println("Logging out...");
+                        running = false; // return to Main menu
+                    }
+
+                    default -> System.out.println("Please select a valid option (1-3).");
+                }
+
+            } catch (ValidationException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
+    }
 }

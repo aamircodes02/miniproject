@@ -1,60 +1,63 @@
 package org.zeta.views;
 
-import org.zeta.dao.ProjectDao;
-import org.zeta.dao.TaskDao;
-import org.zeta.dao.UserDao;
-import org.zeta.model.Builder;
-import org.zeta.model.Project;
-import org.zeta.model.Task;
 import org.zeta.model.User;
 import org.zeta.service.implementation.BuilderService;
-import org.zeta.service.implementation.ProjectManagerService;
+import org.zeta.validation.CommonValidator;
 import org.zeta.validation.ValidationException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class BuilderView {
+
     static BuilderService builderService = new BuilderService();
 
-    public static void builderDashboard(User builder) {
+    // Accept scanner from Main
+    public static void builderDashboard(User builder, Scanner sc) {
 
-        UserDao userDao = new UserDao();
-boolean running=true;
-        Scanner sc = new Scanner(System.in);
+        boolean running = true;
 
         System.out.println("HI Builder");
+
         while (running) {
             System.out.println("""
-                    \n===== Builder Dashboard =====
+                    
+                    ===== Builder Dashboard =====
                     1. View my tasks
-                    2.Update tasks
+                    2. Update tasks
                     3. Logout
-                    Enter your choice:""");
+                    Enter your choice:
+                    """);
+
             try {
-                int builderChoice = sc.nextInt();
+
+                // ALWAYS use nextLine (never nextInt)
+                String input = sc.nextLine();
+                int builderChoice = CommonValidator.validateInteger(input, "Builder menu choice");
+
                 switch (builderChoice) {
-                    case 1:
+
+                    case 1 -> {
                         System.out.println("\n--- Your Tasks ---");
-
                         BuilderService.listOfTasks(builder);
-                        break;
-                    case 2:
-                        System.out.println("Enter Task");
-                        String taskName=sc.nextLine();
-                        BuilderService.updateStatus(taskName,builder);
+                    }
 
-                    case 3:System.out.println("Logging out...");
-                        running = false;
-                        break;
+                    case 2 -> {
+                        System.out.println("Enter Task Name:");
+                        String taskName = sc.nextLine();
 
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
+                        BuilderService.updateStatus(taskName, builder);
+                    }
+
+                    case 3 -> {
+                        System.out.println("Logging out...");
+                        running = false;   // return to Main menu
+                    }
+
+                    default -> System.out.println("Invalid choice. Please try again.");
                 }
-            } catch (ValidationException ValidationException) {
-                System.out.println("Error: " + ValidationException.getMessage());
+
+            } catch (ValidationException ve) {
+                System.out.println("Error: " + ve.getMessage());
             }
         }
     }
