@@ -48,11 +48,12 @@ static void checkValidManager(Project project, User manager) {
                                   User manager) {
         Optional<Project> projectOpt = projectDao.findById(projectId);
         if (projectOpt.isEmpty()) {
-            System.out.println("Project not found. Make sure to enter the correct ID!");
+            System.out.println("Project not found.");
             return;
         }
         Project project = projectOpt.get();
 
+        // 🔒 Ensure it belongs to manager
         if (!project.getProjectManagerId().equals(manager.getId())) {
             System.out.println("You are not authorized to create tasks for this project.");
             return;
