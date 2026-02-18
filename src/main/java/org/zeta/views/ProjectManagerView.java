@@ -131,13 +131,65 @@ public class ProjectManagerView {
                         managerService.assignTask(projectId, taskId, builderId, taskDao, userDao);
                     }
 
-
                     case 5 -> {
-                        System.out.println("Enter Client Username:");
-                        String username = sc.nextLine().trim();
 
-                        managerService.viewProjectsByClient(username, userDao, projectDao);
+                        // STEP 1: Fetch all projects handled by PM
+                        List<Project> pmProjects =
+                                managerService.getClientsOfPM(projectManager, projectDao);
+
+                        if (pmProjects.isEmpty()) {
+                            System.out.println("No clients associated with you.");
+                            continue;
+                        }
+
+                        // STEP 2: Extract unique clients
+                        System.out.println("\n--- Your Clients ---");
+
+                        List<String> clientIds = pmProjects.stream()
+                                .map(Project::getClientId)
+                                .distinct()
+                                .toList();
+
+                        clientIds.forEach(id -> {
+                            userDao.findById(id).ifPresent(client ->
+                                    System.out.println(client.getId() + " - " + client.getUsername())
+                            );
+                        });
+
+                        System.out.println("\nEnter Client ID:");
+                        String clientId = sc.nextLine().trim();
+
+                        // STEP 3: Get projects of that client
+                        List<Project> clientProjects =
+                                managerService.getProjectsByClientAndPM(clientId, projectManager, projectDao);
+
+                        if (clientProjects.isEmpty()) {
+                            System.out.println("No projects found for this client.");
+                            continue;
+                        }
+
+                        // STEP 4: Print table (VIEW responsibility)
+                        System.out.println("\n================ CLIENT PROJECT DETAILS ================");
+
+                        System.out.printf("%-12s %-20s %-12s %-10s %-15s %-10s %-25s\n",
+                                "Project ID", "Project Name", "Start Date", "Duration",
+                                "Status", "Budget", "Description");
+
+                        System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+
+                        clientProjects.forEach(p -> {
+                            System.out.printf("%-12s %-20s %-12s %-10d %-15s %-10.2f %-25s\n",
+                                    p.getProjectId(),
+                                    p.getProjectName(),
+                                    p.getStartDate(),
+                                    p.getDuration(),
+                                    p.getStatus(),
+                                    p.getBudget(),
+                                    p.getDescription()
+                            );
+                        });
                     }
+
 
                     case 6 -> {
                         System.out.println("Logging out...");

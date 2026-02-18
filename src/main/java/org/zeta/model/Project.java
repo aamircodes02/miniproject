@@ -111,4 +111,12 @@ public class Project {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    public float getBudget() {
+        return budget;
+    }
+
+    public void setBudget(float budget) {
+        this.budget = budget;
+    }
 }

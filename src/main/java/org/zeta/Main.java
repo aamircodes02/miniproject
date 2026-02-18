@@ -72,7 +72,7 @@ public class Main {
                             int roleChoice =
                                     CommonValidator.validateInteger(roleInput, "Role choice");
 
-                            switch (roleChoice) {
+                            switch (roleChoice) {//TODO you can do it one line!!!
                                 case 1 -> selectedRole = Role.BUILDER;
                                 case 2 -> selectedRole = Role.PROJECT_MANAGER;
                                 case 3 -> selectedRole = Role.CLIENT;

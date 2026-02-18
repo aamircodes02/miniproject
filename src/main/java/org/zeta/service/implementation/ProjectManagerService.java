@@ -169,4 +169,21 @@ public class ProjectManagerService {
         projectDao.update(project);
         System.out.println("Project updated successfully. Status set to IN_PROGRESS.");
     }
+
+    public List<Project> getClientsOfPM(User projectManager, ProjectDao projectDao) {
+
+        return projectDao.getAll().stream()
+                .filter(p -> p.getProjectManagerId().equals(projectManager.getId()))
+                .toList();
+    }
+
+    public List<Project> getProjectsByClientAndPM(String clientId,
+                                                  User projectManager,
+                                                  ProjectDao projectDao) {
+
+        return projectDao.getAll().stream()
+                .filter(p -> p.getClientId().equals(clientId)
+                        && p.getProjectManagerId().equals(projectManager.getId()))
+                .toList();
+    }
 }
